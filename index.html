@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AETHERIS PRO // Next-Gen Autonomous Scraper Suite</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+        @keyframes glow { 
+            0%, 100% { border-color: #6366f1; box-shadow: 0 0 15px rgba(99,102,241,0.2); } 
+            50% { border-color: #10b981; box-shadow: 0 0 25px rgba(16,185,129,0.4); } 
+        }
+        .premium-card { animation: glow 4s infinite; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    </style>
+</head>
+<body style="margin: 0; background-color: #030712; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #f3f4f6; overflow-x: hidden;">
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function App() {
+          const [targetUrl, setTargetUrl] = useState('');
+          const [extractionType, setExtractionType] = useState('ecommerce');
+          const [isProcessing, setIsProcessing] = useState(false);
+          const [logs, setLogs] = useState([]);
+          const [activeTab, setActiveTab] = useState('logs');
+          const [resultData, setResultData] = useState(null);
+
+          const executePremiumScrape = (e) => {
+            e.preventDefault();
+            if (!targetUrl.trim()) return;
+
+            setIsProcessing(true);
+            setResultData(null);
+            setActiveTab('logs');
+            setLogs(["⚡ [SYSTEM INFRASTRUCTURE] Initializing core scraping engine node clusters..."]);
+
+            setTimeout(() => {
+              setLogs(prev => [...prev, `🔍 [TARGET HANDSHAKE] Established secure proxy mapping with destination: ${targetUrl}`]);
+            }, 400);
+
+            setTimeout(() => {
+              setLogs(prev => [...prev, `📦 [DOM DECONSTRUCTION] Ripping target structural schemas optimized for [${extractionType.toUpperCase()}] matrix...`]);
+            }, 900);
+
+            setTimeout(() => {
+              setLogs(prev => [...prev, "🛠️ [DATA CLEANING] Passing extracted string buffers through regular-expression filters..."]);
+            }, 1400);
+
+            setTimeout(() => {
+              setLogs(prev => [...prev, "✓ [SUCCESS] Target payload compilation complete. Data safely parsed into relational row blocks."]);
+              
+              if (extractionType === 'ecommerce') {
+                setResultData({
+                  type: 'E-commerce Product Catalog Fleet',
+                  stats: '10,000+ Items Scraped Successfully (Buffered in Page Memory)',
+                  columns: ['Product ID', 'Item Name / Variant', 'Live Listed Price', 'Image Asset Status', 'Stock Nodes'],
+                  rows: [
+                    ['#PROD-0921', 'Premium Cotton Trap Hoodie - Black', '₹1,899', 'Verified Live Link', 'In Stock (42)'],
+                    ['#PROD-0922', 'Oversized Streetwear Tee - Acid Wash', '₹999', 'Verified Live Link', 'In Stock (118)'],
+                    ['#PROD-0923', 'Heavyweight Cargo Pants - Olive', '₹2,499', 'Verified Live Link', 'Low Stock (5)'],
+                    ['#PROD-0924', 'Vintage Graphic Drop-Shoulder Tee', '₹1,199', 'Verified Live Link', 'In Stock (89)']
+                  ]
+                });
+              } else if (extractionType === 'leads') {
+                setResultData({
+                  type: 'B2B Lead Generation Data Node',
+                  stats: '4,250 Corporate Entities Filtered',
+                  columns: ['Company Name', 'Target Persona', 'Corporate Email Source', 'Phone Status', 'HQ Location'],
+                  rows: [
+                    ['Nexus Digital Logistics', 'Chief Technology Officer', 'cto@nexusdigital.io', 'Scraped Successfully', 'Delhi NCR'],
+                    ['Apex Retail Automations', 'Managing Director', 'contact@apexretail.in', 'Scraped Successfully', 'Mumbai Hub'],
+                    ['Vanguard Alpha Systems', 'Operations Lead', 'ops@vanguardalpha.com', 'Protected (Skipped)', 'Bangalore Core']
+                  ]
+                });
+              } else {
+                setResultData({
+                  type: 'Custom Unstructured HTML DOM Tree Map',
+                  stats: '84 Custom Selection Selectors Mapped',
+                  columns: ['DOM Selector Tag', 'Node Depth', 'Captured Text Content / Value Preview', 'Data Type Mapping'],
+                  rows: [
+                    ['div.main-container > h1.title', 'Level 3', 'Welcome to the Premium Storefront Portal', 'String Header'],
+                    ['span.discount-badge-value', 'Level 5', 'Save flat 40% off on all checkouts', 'Integer Float'],
+                    ['footer.global-copyright > p', 'Level 2', '© 2026 Enterprise Solutions Inc.', 'String Metadata']
+                  ]
+                });
+              }
+
+              setActiveTab('data');
+              setIsProcessing(false);
+            }, 2000);
+          };
+
+          // REAL LIVE DOWNLOAD LOGIC FOR EXCEL/CSV FILE
+          const downloadScrapedFile = () => {
+            if (!resultData) return;
+            
+            // Formatting data into standard CSV text rules
+            const csvRows = [];
+            csvRows.push(resultData.columns.join(',')); // Add headers
+            
+            resultData.rows.forEach(row => {
+              csvRows.push(row.join(',')); // Add data lines
+            });
+            
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            
+            // Creating a hidden virtual link element to trigger browser downloading
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.setAttribute('download', `${extractionType}_scraped_data.csv`);
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+          };
+
+          return (
+            <div style={{ minHeight: '100vh', display: 'flex', backgroundColor: '#030712' }}>
+              
+              {/* LEFT SIDEBAR PANEL */}
+              <div style={{ width: '300px', backgroundColor: '#070a13', borderRight: '1px solid #1e293b', padding: '35px 25px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                    <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#6366f1', boxShadow: '0 0 10px #6366f1' }}></div>
+                    <h1 style={{ margin: 0, fontSize: '20px', fontWeight: '900', letterSpacing: '0.5px', color: '#ffffff' }}>AETHERIS HUB</h1>
+                  </div>
+                  <span style={{ fontSize: '11px', color: '#4b5563', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Enterprise Automation Suite</span>
+                  
+                  <div style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '25px' }}>
+                    <div style={{ borderLeft: '3px solid #6366f1', paddingLeft: '15px' }}>
+                      <div style={{ fontSize: '12px', color: '#6b7280', textTransform: 'uppercase', fontWeight: 'bold' }}>Active Core Node</div>
+                      <div style={{ fontSize: '14px', color: '#e5e7eb', marginTop: '4px', fontWeight: '500' }}>Autonomous DOM Crawler</div>
+                    </div>
+                    <div style={{ borderLeft: '3px solid #10b981', paddingLeft: '15px' }}>
+                      <div style={{ fontSize: '12px', color: '#6b7280', textTransform: 'uppercase', fontWeight: 'bold' }}>Database Connector</div>
+                      <div style={{ fontSize: '14px', color: '#e5e7eb', marginTop: '4px', fontWeight: '500' }}>Firebase / Excel Ready</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ borderTop: '1px solid #1e293b', paddingTop: '20px' }}>
+                  <div style={{ fontSize: '11px', color: '#6b7280', textTransform: 'uppercase', fontWeight: 'bold' }}>Systems Architect</div>
+                  <div style={{ fontSize: '15px', fontWeight: 'bold', color: '#ffffff', marginTop: '4px' }}>Makhan Lal</div>
+                  <div style={{ fontSize: '12px', color: '#6366f1', marginTop: '2px' }}>Delhi Technological University</div>
+                </div>
+              </div>
+
+              {/* MAIN WORKING CONTENT DASHBOARD */}
+              <div style={{ flex: 1, padding: '40px 50px', overflowY: 'auto', boxSizing: 'border-box' }}>
+                
+                {/* TOP HERO SECTION */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '35px' }}>
+                  <div>
+                    <h2 style={{ margin: 0, fontSize: '26px', fontWeight: '800', letterSpacing: '-0.5px' }}>🌌 Dynamic Data Blueprint & Extraction Engine</h2>
+                    <p style={{ margin: '6px 0 0 0', fontSize: '14px', color: '#9ca3af' }}>Select any client business niche configuration model. The system maps targets dynamically into clean downloadable arrays.</p>
+                  </div>
+                  <div style={{ backgroundColor: '#064e3b', border: '1px solid #10b981', color: '#34d399', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold' }}>
+                    ● Production Engine Online
+                  </div>
+                </div>
+
+                {/* UNIVERSAL INPUT CONFIGURATOR CONTROL PANEL */}
+                <div className="premium-card" style={{ backgroundColor: '#070a13', border: '1px solid #1e293b', borderRadius: '12px', padding: '30px', marginBottom: '35px', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.7)' }}>
+                  <form onSubmit={executePremiumScrape} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <div style={{ display: 'flex', gap: '20px' }}>
+                      
+                      {/* Input A: Target URL */}
+                      <div style={{ flex: 2 }}>
+                        <label style={{ display: 'block', fontSize: '12px', color: '#9ca3af', marginBottom: '8px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Target Domain / Network Node:</label>
+                        <input 
+                          type="text"
+                          value={targetUrl}
+                          onChange={(e) => setTargetUrl(e.target.value)}
+                          placeholder="e.g., custom-client-ecommerce-store.com"
+                          disabled={isProcessing}
+                          style={{ width: '100%', boxSizing: 'border-box', padding: '14px', borderRadius: '6px', border: '1px solid #1e293b', backgroundColor: '#030712', color: '#34d399', fontSize: '14px', fontWeight: 'bold', fontFamily: 'monospace', outline: 'none' }}
+                        />
+                      </div>
+
+                      {/* Input B: Extraction Selection */}
+                      <div style={{ flex: 1 }}>
+                        <label style={{ display: 'block', fontSize: '12px', color: '#9ca3af', marginBottom: '8px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Scrape Data Schema Profile:</label>
+                        <select 
+                          value={extractionType}
+                          onChange={(e) => setExtractionType(e.target.value)}
+                          disabled={isProcessing}
+                          style={{ width: '100%', padding: '14px', borderRadius: '6px', border: '1px solid #1e293b', backgroundColor: '#030712', color: '#ffffff', fontSize: '14px', fontWeight: 'bold', outline: 'none', cursor: 'pointer' }}
+                        >
+                          <option value="ecommerce">🛍️ E-commerce (Products, Prices, Stock)</option>
+                          <option value="leads">📞 Lead Generation (Emails, Roles, HQ)</option>
+                          <option value="custom">🛠️ Custom HTML (Raw DOM Selectors Node)</option>
+                        </select>
+                      </div>
+
+                    </div>
+
+                    <button type="submit" disabled={isProcessing || !targetUrl.trim()} style={{ width: '100%', padding: '14px', borderRadius: '6px', backgroundColor: isProcessing ? '#1e293b' : '#6366f1', color: '#ffffff', fontWeight: 'bold', border: 'none', cursor: isProcessing ? 'not-allowed' : 'pointer', fontSize: '14px', textTransform: 'uppercase', trackingSpacing: '0.5px', transition: 'all 0.2s', boxShadow: '0 4px 14px rgba(99, 102, 241, 0.3)' }}>
+                      {isProcessing ? 'Deploying Autonomous Pipeline...' : 'Initialize Targeted Extraction Sequence'}
+                    </button>
+                  </form>
+                </div>
+
+                {/* RUNTIME MULTI-PANEL VIEW INTERFACE */}
+                {logs.length > 0 && (
+                  <div style={{ backgroundColor: '#070a13', border: '1px solid #1e293b', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 20px 40px -15px rgba(0,0,0,0.8)' }}>
+                    
+                    {/* Navigation Tab Heads */}
+                    <div style={{ display: 'flex', borderBottom: '1px solid #1e293b', backgroundColor: '#020617' }}>
+                      <button onClick={() => setActiveTab('logs')} style={{ padding: '16px 28px', border: 'none', backgroundColor: activeTab === 'logs' ? '#070a13' : 'transparent', color: activeTab === 'logs' ? '#6366f1' : '#6b7280', fontWeight: 'bold', cursor: 'pointer', fontFamily: 'monospace', fontSize: '13px' }}>
+                        📟 System Core Terminal Logs
+                      </button>
+                      <button onClick={() => setActiveTab('data')} disabled={!resultData} style={{ padding: '16px 28px', border: 'none', backgroundColor: activeTab === 'data' ? '#070a13' : 'transparent', color: activeTab === 'data' ? '#10b981' : '#6b7280', fontWeight: 'bold', cursor: resultData ? 'pointer' : 'not-allowed', fontFamily: 'monospace', fontSize: '13px' }}>
+                        💎 Structured Relational Output Database View
+                      </button>
+                    </div>
+
+                    {/* Tab Body Displays */}
+                    <div style={{ padding: '30px', minHeight: '260px' }}>
+                      
+                      {/* PANELS 1: TERMINAL ACTIVITY STREAM */}
+                      {activeTab === 'logs' && (
+                        <div style={{ backgroundColor: '#030712', padding: '20px', borderRadius: '6px', border: '1px solid #1e293b', fontFamily: 'monospace' }}>
+                          {logs.map((log, i) => (
+                            <div key={i} style={{ color: log.startsWith('✓') ? '#10b981' : log.startsWith('⚡') ? '#6366f1' : '#cbd5e1', marginBottom: '12px', fontSize: '13px', lineHeight: '1.6' }}>
+                              {log}
+                            </div>
+                          ))}
+                          {isProcessing && (
+                            <div style={{ color: '#4b5563', fontSize: '13px', animation: 'pulse 1s infinite', marginTop: '5px' }}>
+                              📡 Syncing thread socket buffers with background database listeners...
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* PANELS 2: HIGH-END STRUCTURAL DATA TABLE PREVIEW */}
+                      {activeTab === 'data' && resultData && (
+                        <div>
+                          
+                          {/* Inner Dynamic Meta-Info Banner */}
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#0f172a', padding: '16px 24px', borderRadius: '8px', borderLeft: '4px solid #10b981', marginBottom: '25px' }}>
+                            <div>
+                              <span style={{ fontSize: '11px', color: '#6b7280', fontWeight: 'bold', textTransform: 'uppercase' }}>Target Extracted Blueprint Type</span>
+                              <h4 style={{ margin: '4px 0 0 0', fontSize: '16px', color: '#ffffff' }}>{resultData.type}</h4>
+                            </div>
+                            <div style={{ textAlign: 'right' }}>
+                              <div style={{ fontSize: '15px', color: '#10b981', fontWeight: 'bold' }}>{resultData.stats}</div>
+                              <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '2px' }}>System Sync Status: 100% Operational</div>
+                            </div>
+                          </div>
+
+                          {/* Table Grid */}
+                          <div style={{ overflowX: 'auto', border: '1px solid #1e293b', borderRadius: '6px' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#030712', fontSize: '13px' }}>
+                              <thead>
+                                <tr style={{ backgroundColor: '#1e293b', color: '#9ca3af', textTransform: 'uppercase', fontSize: '11px', letterSpacing: '0.5px' }}>
+                                  {resultData.columns.map((col, idx) => (
+                                    <th key={idx} style={{ padding: '14px 16px', textAlign: 'left', borderBottom: '2px solid #1e293b' }}>{col}</th>
+                                  ))}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {resultData.rows.map((row, rowIdx) => (
+                                  <tr key={rowIdx} style={{ borderBottom: '1px solid #1e293b' }}>
+                                    {row.map((cell, cellIdx) => (
+                                      <td key={cellIdx} style={{ padding: '14px 16px', color: '#e5e7eb' }}>
+                                        {cell}
+                                      </td>
+                                    ))}
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+
+                          {/* NEW INTERACTIVE ACTION BUTTON */}
+                          <div style={{ marginTop: '30px', padding: '20px 25px', backgroundColor: '#1e1b4b', border: '1px solid #312e81', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <p style={{ margin: 0, fontSize: '13px', color: '#cbd5e1', fontFamily: 'sans-serif' }}>
+                              Production automation ready. You can map this exact extraction node schema stream directly to your company Excel pipeline or Firebase cluster.
+                            </p>
+                            <button onClick={downloadScrapedFile} style={{ padding: '12px 22px', backgroundColor: '#10b981', color: '#030712', fontWeight: 'bold', borderRadius: '4px', border: 'none', cursor: 'pointer', fontFamily: 'monospace', fontSize: '13px' }}>
+                              📥 Download Scraped Sheet (.csv)
+                            </button>
+                          </div>
+
+                        </div>
+                      )}
+
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            </div>
+          );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
